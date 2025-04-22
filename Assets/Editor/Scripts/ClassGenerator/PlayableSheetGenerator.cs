@@ -157,6 +157,7 @@ namespace RIPinc.GoogleSheet.ClassGenerator
                         for (var i = 0; i < _tableData.XTypes.Length; i++)
                         {
                             var type = _tableData.XTypes[i];
+                            var typeName = _tableData.XTypeNames[i];
                             var xKey = _tableData.XKeys[i].Replace(" ", "_").Replace("/","_");
                             if(type == ValueType.String)
                             {
@@ -178,11 +179,11 @@ namespace RIPinc.GoogleSheet.ClassGenerator
                             }
                             else if (type == ValueType.IfElse)
                             {
-                                Add($"{xKey} = {GetTypeToField(type)}.Parse(tableData.GetData({i},index));");
+                                Add($"{xKey} = {GetTypeToField(type, typeName)}.Parse(tableData.GetData({i},index));");
                             }
                             else if (type == ValueType.Probability)
                             {
-                                Add($"{xKey} = {GetTypeToField(type)}.Parse(tableData.GetData({i},index));");
+                                Add($"{xKey} = {GetTypeToField(type, typeName)}.Parse(tableData.GetData({i},index));");
                                 Add("SetProbability(" + xKey + ");");
                             }
                             else if (type == ValueType.Enum)
@@ -195,7 +196,7 @@ namespace RIPinc.GoogleSheet.ClassGenerator
                             }
                             else if (type == ValueType.Probability)
                             {
-                                Add($"{xKey} = {GetTypeToField(type)}.Parse(tableData.GetData({i},index));");
+                                Add($"{xKey} = {GetTypeToField(type, typeName)}.Parse(tableData.GetData({i},index));");
                             }
                             else if (type == ValueType.RangeMin)
                             {
@@ -210,7 +211,18 @@ namespace RIPinc.GoogleSheet.ClassGenerator
                                 Add($"{xKey} = IPlayableSheetData.IntParse(tableData.GetData({i},index));");
                             }
                             else
-                                Add($"{xKey} = {GetTypeToField(type)}.Parse(tableData.GetData({i},index));");
+                            {
+                                if (_setting.IsExceptionalHandling)
+                                {
+                                    Add($"var __{xKey} = tableData.GetData({i},index);");
+                                    Add($"{xKey} = __{xKey} != \"\" ? {GetTypeToField(type, typeName)}.Parse(__{xKey}) : default;");
+                                }
+                                else
+                                {
+                                    Add($"{xKey} = {GetTypeToField(type, typeName)}.Parse(tableData.GetData({i},index));");
+                                }
+                                
+                            }
                         }
                     }
                     E();
@@ -318,7 +330,7 @@ namespace RIPinc.GoogleSheet.ClassGenerator
                         
                 if(_tableData.XTypes[i] != ValueType.RangeMax && _tableData.XTypes[i] != ValueType.RangeMin)
                 {
-                    Add($"public {GetTypeToField(_tableData.XTypes[i])} {_tableData.XKeys[i].Replace(" ", "_").Replace("/", "_")};");
+                    Add($"public {GetTypeToField(_tableData.XTypes[i], _tableData.XTypeNames[i])} {_tableData.XKeys[i].Replace(" ", "_").Replace("/", "_")};");
                 }
                         
                 if(_tableData.XTypes[i] == ValueType.RangeMin && i < _tableData.XTypes.Length - 1)
@@ -327,14 +339,25 @@ namespace RIPinc.GoogleSheet.ClassGenerator
         }
 
 
-        private string GetTypeToField(ValueType type)
+        private string GetTypeToField(ValueType type, string typeString)
         {
             switch (type)
             {
                 case ValueType.String:
-                    if(!_setting.IsStructMode)
-                        return "string";
-                    return "FixedString128Bytes";
+                {
+                    bool isGeneric = typeString.Contains('<');
+                    if (isGeneric)
+                    {
+                        string t = typeString.Split('<').Last();
+                        return t.Remove(t.Length - 1, 1);
+                    }
+                    else
+                    {
+                        if (!_setting.IsStructMode)
+                            return "string";
+                        return "FixedString128Bytes";
+                    }
+                }
                 case ValueType.Int:
                     return "int";
                 case ValueType.Float:
@@ -351,6 +374,8 @@ namespace RIPinc.GoogleSheet.ClassGenerator
                     return "float";
                 case ValueType.RangeMin:
                     return "Range";
+                case ValueType.EnumGenenric:
+                    return typeString;
             }
 
             return "";

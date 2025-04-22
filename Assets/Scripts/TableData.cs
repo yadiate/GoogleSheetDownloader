@@ -66,6 +66,6 @@ namespace RIPinc.GoogleSheet
 
     public enum ValueType
     {
-        String,Int,Float,Bool,Enum,Range,Vector2,Probability,EnumFlag,IfElse,RangeMin,RangeMax
+        String,Int,Float,Bool,Enum,Range,Vector2,Probability,EnumFlag,IfElse,RangeMin,RangeMax,EnumGenenric
     }
 }

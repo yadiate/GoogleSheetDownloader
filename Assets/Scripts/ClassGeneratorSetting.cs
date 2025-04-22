@@ -29,5 +29,9 @@ namespace RIPinc.GoogleSheet
         // [InfoBox("Enum 코드에 Temp 글자가 포함되어 있으면 제거합니다")]
         // [LabelText("Enum Temp 제거")] 
         public bool IsEnumTempSeparation;
+        
+        //[InfoBox("빈 문자열을 파싱할때 생기는 오류를 예외처리 합니다")]
+        //[LabelText("Parse 예외처리 추가")] 
+        public bool IsExceptionalHandling;
     }
 }

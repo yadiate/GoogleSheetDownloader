@@ -120,6 +120,18 @@ namespace RIPinc.GoogleSheet
                         }
                     }
 
+                    if (t.Contains("<"))
+                    {//Generic
+                        var split = t.Split('<');
+                        if (split.Length == 2)
+                        {
+                            if(split[0] == "Enum")
+                                return (ValueType.EnumGenenric, split[1].Substring(0, split[1].Length - 1));
+                            else 
+                                return (ValueType.String, "String");
+                        }
+                    }
+
                     return (ValueType.String, "String");
                 }
 
