@@ -87,8 +87,11 @@ namespace RIPinc.GoogleSheet
             {
                 if(!string.IsNullOrEmpty(t) && t.Length > 1)
                 {
-                    t = t.ToLower();
-                    t = t.ToUpper()[0] + t.Substring(1);
+                    if (!t.Contains("<")) //Generic은 제외
+                    {
+                        t = t.ToLower();
+                        t = t.ToUpper()[0] + t.Substring(1);
+                    }
                 }
                 else
                 {

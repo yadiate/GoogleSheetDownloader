@@ -210,6 +210,10 @@ namespace RIPinc.GoogleSheet.ClassGenerator
                             {
                                 Add($"{xKey} = IPlayableSheetData.IntParse(tableData.GetData({i},index));");
                             }
+                            else if (type == ValueType.EnumGenenric)
+                            {
+                                Add($"{xKey} = ({typeName})Enum.Parse(typeof({typeName}),tableData.GetData({i},index));");
+                            }
                             else
                             {
                                 if (_setting.IsExceptionalHandling)
