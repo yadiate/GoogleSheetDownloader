@@ -5,9 +5,9 @@
   "description": "구글 시트에 작성된 데이터를 다운로드받아 유니티에서 손쉽게 사용할수있게 해줍니다",
   "unity": "2019.1",
   "unityRelease": "0b5",
-  "dependencies": {
-    "com.cysharp.unitask": "2.5.10"
- },
+    "dependencies": {
+        "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
+    },
  "keywords": [
     "google",
     "sheet",
