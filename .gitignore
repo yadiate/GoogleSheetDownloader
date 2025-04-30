@@ -11,6 +11,16 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
+
+src/GoogleSheetDownloader/[Ll]ibrary/
+src/GoogleSheetDownloader/[Tt]emp/
+src/GoogleSheetDownloader/[Oo]bj/
+src/GoogleSheetDownloader/[Bb]uild/
+src/GoogleSheetDownloader/[Bb]uilds/
+src/GoogleSheetDownloader/[Ll]ogs/
+src/GoogleSheetDownloader/[Uu]ser[Ss]ettings/
+
+
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
